@@ -2,10 +2,7 @@
   "name": "wingman-server",
   "version": "1.0.0",
   "description": "Wingman API server",
-  "main": "server.js",
-  "engines": {
-    "node": "18.x"
-  },
+  "main": "index.js",
   "scripts": {
     "dev": "node server.js",
     "build": "vercel build",
