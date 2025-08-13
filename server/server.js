@@ -84,9 +84,12 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Development server running on http://localhost:${PORT}`);
-  console.log('API endpoint: http://localhost:3000/api/ask');
-  console.log('Using Groq API with actual LLM responses');
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`Production server running on port ${PORT}`);
+  } else {
+    console.log(`Development server running on http://localhost:${PORT}`);
+  }
+  console.log(`API endpoint: /api/ask`);
 });
