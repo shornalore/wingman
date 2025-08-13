@@ -1,49 +1,41 @@
+// api/ask.js
 import { kv } from '@vercel/kv';
 import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export default async function handler(req, res) {
+  // 1. Only POST allowed
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { text, mode, thread = [] } = req.body;
-  
+  // 2. Validate body
+  const { text, mode = 'explain', thread = [] } = req.body ?? {};
   if (!text || text.length > 600) {
     return res.status(400).json({ error: 'Invalid text' });
   }
 
   try {
-    // Rate limiting check
-    const clientId = req.headers['x-forwarded-for'] || 'anonymous';
+    // 3. Rate-limit by IP
+    const clientId = req.headers['x-forwarded-for']?.split(',')[0] || 'anonymous';
     const key = `rate_limit:${clientId}`;
     const count = await kv.incr(key);
-    
-    if (count === 1) {
-      await kv.expire(key, 3600); // 1 hour window
-    }
-    
-    if (count > 100) {
-      return res.status(429).json({ error: 'Rate limit exceeded' });
-    }
+    if (count === 1) await kv.expire(key, 3600); // 1 h window
+    if (count > 100) return res.status(429).json({ error: 'Rate limit exceeded' });
 
-    // Cache key for responses
+    // 4. Cached response?
     const cacheKey = `response:${text}:${mode}`;
     const cached = await kv.get(cacheKey);
-    
-    if (cached) {
-      return res.json(cached);
-    }
+    if (cached) return res.json(cached);
 
-    // Prepare prompt based on mode
-    const prompt = mode === 'define'
-      ? `Define "${text}" in one sentence and give 2 short examples.`
-      : `Answer concisely (≤ 60 words): ${text}`;
+    // 5. Build prompt
+    const prompt =
+      mode === 'define'
+        ? `Define "${text}" in one sentence and give 2 short examples.`
+        : `Answer concisely (≤ 60 words): ${text}`;
 
-    // Make API call to Groq
+    // 6. Call Groq
     const completion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
       model: 'llama-3.3-70b-versatile',
@@ -52,26 +44,20 @@ export default async function handler(req, res) {
     });
 
     const answer = completion.choices[0]?.message?.content?.trim() || 'No response available';
-    
-    const result = { 
-      answer, 
-      tokens: completion.usage?.total_tokens || 0 
-    };
+    const result = { answer, tokens: completion.usage?.total_tokens || 0 };
 
-    // Cache for 7 days
+    // 7. Cache for 7 days
     await kv.set(cacheKey, result, { ex: 7 * 24 * 3600 });
 
-    res.json(result);
+    return res.json(result);
   } catch (error) {
     console.error('API Error:', error);
-    
-    // Fallback response for development
+
+    // 8. Safe fallback
     const fallbackResponses = {
       define: `"${text}" refers to a concept or term that requires clarification. In most contexts, this would be defined based on the surrounding content and usage patterns.`,
-      explain: `Let me explain "${text}" in simple terms. This appears to be a key concept that benefits from contextual understanding.`
+      explain: `Let me explain "${text}" in simple terms. This appears to be a key concept that benefits from contextual understanding.`,
     };
-    
-    const fallbackAnswer = fallbackResponses[mode] || fallbackResponses.explain;
-    res.json({ answer: fallbackAnswer, tokens: 0 });
+    return res.json({ answer: fallbackResponses[mode] || fallbackResponses.explain, tokens: 0 });
   }
 }
