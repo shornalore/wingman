@@ -4,14 +4,16 @@
   "description": "Wingman API server",
   "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "node server.js",
     "build": "vercel build",
     "deploy": "vercel deploy"
   },
   "dependencies": {
-    "@vercel/kv": "^0.2.3"
+    "@vercel/kv": "^0.2.3",
+    "dotenv": "^17.2.1",
+    "groq-sdk": "^0.30.0"
   },
   "devDependencies": {
-    "vercel": "^32.5.0"
+    "vercel": "^44.7.3"
   }
 }

@@ -74,28 +74,47 @@ class Chatbox {
     this.container.style.display = 'none';
   }
 
-  async ask(text, mode) {
+  ask(text, mode) {
     if (this.interactionCount >= this.maxInteractions) return;
 
     this.interactionCount++;
     this.addMessage(text, 'user');
     
-    try {
-      const response = await chrome.runtime.sendMessage({
-        type: 'ASK',
-        payload: { text, mode, thread: this.messageHistory }
-      });
+    // Show loading state
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'wingman-message wingman-loading';
+    loadingMsg.textContent = 'Loading...';
+    this.container.querySelector('.wingman-messages').appendChild(loadingMsg);
+    
+    console.log('Sending request to background:', { text, mode });
+    
+    // Send message and wait for response
+    chrome.runtime.sendMessage({
+      type: 'ASK',
+      payload: { text, mode, thread: this.messageHistory }
+    }, (response) => {
+      console.log('Received response in callback:', response);
+      
+      // Remove loading message
+      const loading = this.container.querySelector('.wingman-loading');
+      if (loading) loading.remove();
+      
+      if (!response) {
+        console.error('No response received from background script');
+        this.addMessage('No response from server', 'error');
+        return;
+      }
       
       if (response.error) {
+        console.error('Error from API:', response.error);
         this.addMessage(`Error: ${response.error}`, 'error');
       } else {
+        console.log('Adding answer to chat:', response.answer);
         this.addMessage(response.answer, 'assistant');
         this.messageHistory.push({ role: 'user', content: text });
         this.messageHistory.push({ role: 'assistant', content: response.answer });
       }
-    } catch (error) {
-      this.addMessage('Failed to connect to server', 'error');
-    }
+    });
 
     if (this.interactionCount >= this.maxInteractions) {
       this.container.querySelector('.wingman-input').disabled = true;

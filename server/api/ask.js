@@ -1,4 +1,9 @@
 import { kv } from '@vercel/kv';
+import Groq from 'groq-sdk';
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -25,17 +30,48 @@ export default async function handler(req, res) {
       return res.status(429).json({ error: 'Rate limit exceeded' });
     }
 
-    // Mock responses for demo
-    const responses = {
-      define: `"${text}" refers to a concept or term that requires clarification. In most contexts, this would be defined based on the surrounding content and usage patterns.`,
-      explain: `Let me explain "${text}" in simple terms. This appears to be a key concept that benefits from contextual understanding. The explanation would typically include examples and practical applications.`
+    // Cache key for responses
+    const cacheKey = `response:${text}:${mode}`;
+    const cached = await kv.get(cacheKey);
+    
+    if (cached) {
+      return res.json(cached);
+    }
+
+    // Prepare prompt based on mode
+    const prompt = mode === 'define'
+      ? `Define "${text}" in one sentence and give 2 short examples.`
+      : `Answer concisely (≤ 60 words): ${text}`;
+
+    // Make API call to Groq
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 120,
+      temperature: 0,
+    });
+
+    const answer = completion.choices[0]?.message?.content?.trim() || 'No response available';
+    
+    const result = { 
+      answer, 
+      tokens: completion.usage?.total_tokens || 0 
     };
 
-    const answer = responses[mode] || responses.explain;
+    // Cache for 7 days
+    await kv.set(cacheKey, result, { ex: 7 * 24 * 3600 });
 
-    res.json({ answer });
+    res.json(result);
   } catch (error) {
     console.error('API Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    
+    // Fallback response for development
+    const fallbackResponses = {
+      define: `"${text}" refers to a concept or term that requires clarification. In most contexts, this would be defined based on the surrounding content and usage patterns.`,
+      explain: `Let me explain "${text}" in simple terms. This appears to be a key concept that benefits from contextual understanding.`
+    };
+    
+    const fallbackAnswer = fallbackResponses[mode] || fallbackResponses.explain;
+    res.json({ answer: fallbackAnswer, tokens: 0 });
   }
 }

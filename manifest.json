@@ -5,7 +5,7 @@
   "description": "Turn any webpage into an interactive knowledge surface",
   "permissions": ["activeTab", "scripting"],
   "background": {
-    "service_worker": "src/background.js"
+    "scripts": ["src/background.js"]
   },
   "content_scripts": [
     {
