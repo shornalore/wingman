@@ -3,7 +3,7 @@
   "name": "Wingman",
   "version": "1.0.0",
   "description": "Turn any webpage into an interactive knowledge surface",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "https://wingman-kappa.vercel.app/*"],
   "background": {
     "scripts": ["src/background.js"]
   },
