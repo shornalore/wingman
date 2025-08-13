@@ -1,40 +1,21 @@
 {
   "version": 2,
-  "builds": [{
-    "src": "server/server.js",
-    "use": "@vercel/node",
-    "config": {
-      "maxLambdaSize": "10mb",
-      "includeFiles": "server/**"
+  "builds": [
+    {
+      "src": "server/api/*.js",
+      "use": "@vercel/node"
     }
-  }],
+  ],
   "routes": [
     {
       "src": "/api/ask",
-      "dest": "server/server.js",
-      "methods": ["POST"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST",
-        "Access-Control-Allow-Headers": "Content-Type"
-      }
+      "dest": "server/api/ask.js",
+      "methods": ["POST"]
     },
     {
       "src": "/health",
-      "dest": "server/server.js",
+      "dest": "server/api/health.js",
       "methods": ["GET"]
-    },
-    {
-      "src": "/(.*)",
-      "dest": "server/server.js",
-      "status": 404
     }
-  ],
-  "functions": {
-    "server/server.js": {
-      "maxDuration": 9,
-      "memory": 1024,
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }
