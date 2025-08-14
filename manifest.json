@@ -26,6 +26,11 @@
     "128": "icons/icon-128.png"
   },
   "host_permissions": [
-  "https://wingman-51k8gr5pi-trojanas-projects.vercel.app/*"
-]
+    "https://wingman-kappa.vercel.app/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wingman-extension@yourdomain.com"
+    }
+  }
 }
