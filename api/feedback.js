@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'Wingman Feedback <feedback@wingman-kappa.vercel.app>',
+      from: 'Wingman Feedback <onboarding@resend.dev>',
       to: [recipientEmail],
       subject: `Wingman Feedback - ${new Date(timestamp).toLocaleDateString()}`,
       html: emailContent,
