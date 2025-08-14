@@ -27,7 +27,7 @@ class UsageTracker {
 // Feedback system
 class FeedbackSystem {
   constructor() {
-    this.feedbackEndpoint = 'https://wingman-51k8gr5pi-trojanas-projects.vercel.app/api/feedback';
+    this.feedbackEndpoint = 'https://wingman-kappa.vercel.app/api/feedback';
   }
 
   async sendFeedback(text, usageCount) {

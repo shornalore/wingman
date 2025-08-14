@@ -1,5 +1,5 @@
 // const API_BASE = 'http://localhost:3000'; // dev
-const API_BASE = 'https://wingman-23t3ua3ct-trojanas-projects.vercel.app'; // prod
+const API_BASE = 'https://wingman-kappa.vercel.app'; // prod
 
 browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === 'ASK') {
