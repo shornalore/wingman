@@ -40,8 +40,8 @@ export default async function handler(req, res) {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'Wingman Feedback <adityanath11@outlook.com>',
-      to: ['adityanath11@outlook.com'],
+      from: 'Wingman Feedback <onboarding@resend.dev>',
+      to: [recipientEmail],
       subject: `Wingman Feedback - ${new Date(timestamp).toLocaleDateString()}`,
       html: emailContent,
     });
