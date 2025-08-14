@@ -89,10 +89,10 @@ class Chatbox {
     console.log('Sending request to background:', { text, mode });
     
     // Send message and wait for response
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       type: 'ASK',
       payload: { text, mode, thread: this.messageHistory }
-    }, (response) => {
+    }).then((response) => {
       console.log('Received response in callback:', response);
       
       // Remove loading message
@@ -114,6 +114,11 @@ class Chatbox {
         this.messageHistory.push({ role: 'user', content: text });
         this.messageHistory.push({ role: 'assistant', content: response.answer });
       }
+    }).catch((error) => {
+      console.error('Error sending message:', error);
+      const loading = this.container.querySelector('.wingman-loading');
+      if (loading) loading.remove();
+      this.addMessage('Failed to send message', 'error');
     });
 
     if (this.interactionCount >= this.maxInteractions) {

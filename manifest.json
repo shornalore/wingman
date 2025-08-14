@@ -3,7 +3,7 @@
   "name": "Wingman",
   "version": "1.0.0",
   "description": "Turn any webpage into an interactive knowledge surface",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "background": {
     "scripts": ["src/background.js"]
   },
@@ -24,5 +24,8 @@
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
-  }
+  },
+  "host_permissions": [
+  "https://wingman-51k8gr5pi-trojanas-projects.vercel.app/*"
+]
 }
