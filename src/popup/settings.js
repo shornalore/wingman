@@ -2,7 +2,7 @@
 class UsageTracker {
   constructor() {
     this.storageKey = 'wingman_usage';
-    this.maxUsage = 1000; // Unlimited during beta
+    this.maxUsage = 100; // Unlimited during beta
   }
 
   async getUsage() {

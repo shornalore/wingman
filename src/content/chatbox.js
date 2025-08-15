@@ -23,7 +23,7 @@ class Chatbox {
       <div class="wingman-content">
         <div class="wingman-actions">
           <button class="wingman-btn" data-mode="define">Define</button>
-          <button class="wingman-btn" data-mode="explain">Explain</button>
+          <button class="wingman-btn" data-mode="explain">Solve</button>
         </div>
         <div class="wingman-messages"></div>
         <div class="wingman-input-container">
