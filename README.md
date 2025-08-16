@@ -1,11 +1,13 @@
-<div align="center">
-  <a href="https://github.com/shornalore/wingman">
-    <img src="icons/wingman-readme-logo.png" alt="Wingman Logo" width="200">
-  </a>
-  
-  # Wingman Extension
-  
-  Turn any webpage into an interactive knowledge surface. Select text, get instant explanations, definitions, and summaries.
+<div style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+  <div style="flex: 1;">
+    <h1 style="margin: 0; font-size: 2.5rem; color: white; font-weight: 700;">Wingman Extension</h1>
+    <p style="margin: 0.5rem 0 0 0; font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Turn any webpage into an interactive knowledge surface. Select text, get instant explanations, definitions, and summaries.</p>
+  </div>
+  <div style="margin-left: 2rem;">
+    <a href="https://github.com/shornalore/wingman">
+      <img src="icons/wingman-readme-logo.png" alt="Wingman Logo" width="180" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+    </a>
+  </div>
 </div>
 
 ## Setup Instructions
