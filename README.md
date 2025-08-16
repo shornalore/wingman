@@ -1,6 +1,12 @@
-# Wingman Extension
-
-Turn any webpage into an interactive knowledge surface. Select text, get instant explanations, definitions, and summaries.
+<div align="center">
+  <a href="https://github.com/shornalore/wingman">
+    <img src="icons/wingman-readme-logo.png" alt="Wingman Logo" width="200">
+  </a>
+  
+  # Wingman Extension
+  
+  Turn any webpage into an interactive knowledge surface. Select text, get instant explanations, definitions, and summaries.
+</div>
 
 ## Setup Instructions
 
@@ -54,6 +60,25 @@ npm run dev
 - Feedback system with email notifications
 - Cross-browser compatibility
 - Clean, minimal UI
+
+## Screenshots
+
+<div align="center">
+  
+  <p><strong>Extension Interface</strong></p>
+  <img src="icons/screenshot1.png" alt="Extension Interface" width="90%">
+  
+  <br>
+  
+  <p><strong>Text Selection in Action</strong></p>
+  <img src="icons/screenshot2.png" alt="Text Selection in Action" width="90%">
+  
+  <br>
+  
+  <p><strong>Feature Overview</strong></p>
+  <img src="icons/screenshot3.png" alt="Feature Overview" width="90%">
+  
+</div>
 
 ## Tech Stack
 - Frontend: Vanilla JavaScript, CSS
