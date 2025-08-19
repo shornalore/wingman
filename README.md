@@ -13,7 +13,7 @@
 ## Setup Instructions
 
 ### For Users
-1. Install the extension from the Firefox Add-ons store
+1. Install the extension from the Firefox Add-ons store <https://addons.mozilla.org/en-US/firefox/addon/wingman-ai-web-companion/>
 2. Double-click any text on any webpage
 3. Choose "Explain", "Define", or "Summarize"
 
